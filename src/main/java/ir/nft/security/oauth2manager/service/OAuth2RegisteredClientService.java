@@ -50,7 +50,7 @@ public class OAuth2RegisteredClientService {
     resourceServer = resourceServerRepository.save(resourceServer);
 
     return OAuth2ResourceServerDTO.builder()
-        .id(resourceServer.getId())
+        .id(resourceServer.getId().toString())
         .clientId(resourceServer.getClientId())
         .build();
   }
@@ -70,7 +70,7 @@ public class OAuth2RegisteredClientService {
     client = clientRepository.save(client);
 
     return OAuth2ClientDTO.builder()
-        .id(client.getId())
+        .id(client.getId().toString())
         .clientId(client.getClientId())
         .redirectUri(client.getRedirectUri())
         .build();

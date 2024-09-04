@@ -20,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OAuth2GroupDTO {
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private UUID id;
+  private String id;
 
   @NotNull(message = "The title of the group must be included")
   @GroupTitle(

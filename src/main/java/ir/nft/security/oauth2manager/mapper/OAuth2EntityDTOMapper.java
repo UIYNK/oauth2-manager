@@ -13,7 +13,7 @@ public class OAuth2EntityDTOMapper {
   public OAuth2UserDTO mapToOAuth2UserDTO(OAuth2User oAuth2User) {
 
     return OAuth2UserDTO.builder()
-        .id(oAuth2User.getId())
+        .id(oAuth2User.getId().toString())
         .firstName(oAuth2User.getFirstName())
         .lastName(oAuth2User.getLastName())
         .username(oAuth2User.getUsername())
@@ -25,7 +25,7 @@ public class OAuth2EntityDTOMapper {
 
     return OAuth2GroupDTO.builder()
         .title(oAuth2Group.getTitle())
-        .id(oAuth2Group.getId())
+        .id(oAuth2Group.getId().toString())
         .subGroupsIdSet(mapToIdSet(oAuth2Group.getSubGroups()))
         .activitiesIdSet(mapToIdSet(oAuth2Group.getActivities()))
         .build();
@@ -33,7 +33,7 @@ public class OAuth2EntityDTOMapper {
 
   public OAuth2ActivityDTO mapToOAuth2ActivityDTO(OAuth2Activity oAuth2Activity) {
     return OAuth2ActivityDTO.builder()
-        .id(oAuth2Activity.getId())
+        .id(oAuth2Activity.getId().toString())
         .path(oAuth2Activity.getPath())
         .cumulativePath(oAuth2Activity.getCumulativePath())
         .parentId(null != oAuth2Activity.getParent() ? oAuth2Activity.getParent().getId() : null)
@@ -57,14 +57,14 @@ public class OAuth2EntityDTOMapper {
   public OAuth2ResourceServerDTO mapToOAuth2ResourceServerDTO(
       OAuth2ResourceServer oAuth2ResourceServer) {
     return OAuth2ResourceServerDTO.builder()
-        .id(oAuth2ResourceServer.getId())
+        .id(oAuth2ResourceServer.getId().toString())
         .clientId(oAuth2ResourceServer.getClientId())
         .build();
   }
 
   public OAuth2ClientDTO mapToOAuth2ClientDTO(OAuth2Client oAuth2Client) {
     return OAuth2ClientDTO.builder()
-        .id(oAuth2Client.getId())
+        .id(oAuth2Client.getId().toString())
         .clientId(oAuth2Client.getClientId())
         .redirectUri(oAuth2Client.getRedirectUri())
         .build();

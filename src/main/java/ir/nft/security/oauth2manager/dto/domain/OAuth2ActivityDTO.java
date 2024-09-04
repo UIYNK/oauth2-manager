@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OAuth2ActivityDTO {
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private UUID id;
+  private String id;
 
   /** A validator should be provided for this field later on */
   @NotNull(message = "The path field must be included")

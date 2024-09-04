@@ -22,7 +22,7 @@ import java.util.UUID;
 public class OAuth2UserDTO {
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private UUID id;
+  private String id;
 
   @UserName(message = "Usernames must follow this pattern: " + ValidationPolicy.USERNAME_REGEX)
   @NotNull(message = "The username field must be included")
