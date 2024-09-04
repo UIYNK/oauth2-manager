@@ -1,5 +1,7 @@
 package ir.nft.security.oauth2manager.entity;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
@@ -13,9 +15,9 @@ import java.util.UUID;
 @EqualsAndHashCode
 @MappedSuperclass
 public abstract class OAuth2Entity {
-  @Id UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  UUID id;
 
-  protected OAuth2Entity() {
-    this.id = UUID.randomUUID();
-  }
+  protected OAuth2Entity() {}
 }
