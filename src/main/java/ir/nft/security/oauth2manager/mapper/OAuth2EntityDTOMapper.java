@@ -5,6 +5,7 @@ import ir.nft.security.oauth2manager.entity.*;
 import org.springframework.util.Assert;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class OAuth2EntityDTOMapper {
@@ -30,21 +31,12 @@ public class OAuth2EntityDTOMapper {
         .build();
   }
 
-  public OAuth2Activity mapToOAuth2Activity(OAuth2ActivityDTO oAuth2ActivityDTO) {
-    return OAuth2Activity.builder()
-        .path(oAuth2ActivityDTO.getPath())
-        .cumulativePath(oAuth2ActivityDTO.getCumulativePath())
-        .parentId(oAuth2ActivityDTO.getParentId())
-        .resourceServerClientId(oAuth2ActivityDTO.getResourceServerClientId())
-        .build();
-  }
-
   public OAuth2ActivityDTO mapToOAuth2ActivityDTO(OAuth2Activity oAuth2Activity) {
     return OAuth2ActivityDTO.builder()
         .id(oAuth2Activity.getId())
         .path(oAuth2Activity.getPath())
         .cumulativePath(oAuth2Activity.getCumulativePath())
-        .parentId(oAuth2Activity.getParentId())
+        .parentId(null != oAuth2Activity.getParent() ? oAuth2Activity.getParent().getId() : null)
         .resourceServerClientId(oAuth2Activity.getResourceServerClientId())
         .build();
   }
@@ -78,12 +70,12 @@ public class OAuth2EntityDTOMapper {
         .build();
   }
 
-  public <T extends OAuth2Entity> Set<Integer> mapToIdSet(Set<T> entitySet) {
+  public <T extends OAuth2Entity> Set<UUID> mapToIdSet(Set<T> entitySet) {
     Assert.notNull(
         entitySet,
         "An entitySet must not be null. Provide an empty set if it is intended to not contain any entities");
 
-    Set<Integer> idSet;
+    Set<UUID> idSet;
     idSet = entitySet.stream().map(entity -> entity.getId()).collect(Collectors.toSet());
 
     return idSet;

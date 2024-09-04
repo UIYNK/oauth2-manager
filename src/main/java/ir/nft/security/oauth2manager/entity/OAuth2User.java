@@ -12,21 +12,11 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
-@Builder
-@AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "oauth2_user")
-public class OAuth2User implements OAuth2Entity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "oauth2_user_seq_gen")
-  @SequenceGenerator(
-      name = "oauth2_user_seq_gen",
-      sequenceName = "oauth2_user_seq",
-      allocationSize = 1)
-  @EqualsAndHashCode.Exclude
-  private Integer id;
+public class OAuth2User extends OAuth2Entity {
 
   @Column(nullable = false, unique = true)
   @UserName
@@ -47,13 +37,27 @@ public class OAuth2User implements OAuth2Entity {
   @NotNull
   private String lastName;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany
   @JoinTable(
       name = "oauth2_user_group",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "group_id"))
   @EqualsAndHashCode.Exclude
   private Set<OAuth2Group> groups;
+
+  public OAuth2User(
+      String username,
+      String password,
+      String firstName,
+      String lastName,
+      Set<OAuth2Group> groups) {
+    super();
+    this.username = username;
+    this.password = password;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.groups = groups;
+  }
 
   /**
    * Retrieves all {@link OAuth2Activity} objects associated with the current User.

@@ -12,6 +12,7 @@ import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -21,7 +22,7 @@ import java.util.Set;
 public class OAuth2UserDTO {
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private Integer id;
+  private UUID id;
 
   @UserName(message = "Usernames must follow this pattern: " + ValidationPolicy.USERNAME_REGEX)
   @NotNull(message = "The username field must be included")
@@ -42,6 +43,6 @@ public class OAuth2UserDTO {
   @NotNull(message = "The password field must be included")
   private String password;
 
-  @Nullable private Set<Integer> groupsIdSet;
+  @Nullable private Set<UUID> groupsIdSet;
   @JsonIgnore @Nullable private Set<OAuth2Group> groups;
 }

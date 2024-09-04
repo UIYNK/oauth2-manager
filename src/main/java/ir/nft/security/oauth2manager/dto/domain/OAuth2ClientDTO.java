@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
+import java.util.UUID;
+
 @Setter
 @Getter
 @Builder
@@ -15,7 +17,7 @@ import org.hibernate.validator.constraints.URL;
 @NoArgsConstructor
 public class OAuth2ClientDTO {
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private Integer id;
+  private UUID id;
 
   @UserName(message = "Client IDs must follow this pattern: " + ValidationPolicy.USERNAME_REGEX)
   @NotNull(message = "The clientId field must be included")

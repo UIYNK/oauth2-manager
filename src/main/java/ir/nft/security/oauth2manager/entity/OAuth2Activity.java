@@ -10,19 +10,9 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@Builder
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "oauth2_activity")
-public class OAuth2Activity implements OAuth2Entity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "oauth2_activity_seq_gen")
-  @SequenceGenerator(
-      name = "oauth2_activity_seq_gen",
-      sequenceName = "oauth2_activity_seq",
-      allocationSize = 1)
-  @EqualsAndHashCode.Exclude
-  private Integer id;
+public class OAuth2Activity extends OAuth2Entity {
 
   /** A validator should be provided for this field later on */
   @Column(nullable = false)
@@ -34,10 +24,25 @@ public class OAuth2Activity implements OAuth2Entity {
   @NotNull
   private String cumulativePath;
 
-  @Nullable private Integer parentId;
+  @Nullable
+  @OneToOne
+  @JoinColumn(name = "parent_id")
+  private OAuth2Activity parent;
 
   @Column(nullable = false)
   @NotNull
   @UserName
   private String resourceServerClientId;
+
+  public OAuth2Activity(
+      String path,
+      String cumulativePath,
+      @Nullable OAuth2Activity parent,
+      String resourceServerClientId) {
+    super();
+    this.path = path;
+    this.cumulativePath = cumulativePath;
+    this.parent = parent;
+    this.resourceServerClientId = resourceServerClientId;
+  }
 }

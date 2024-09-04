@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
+import java.util.UUID;
+
 @Setter
 @Getter
 @Builder
@@ -12,7 +14,7 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor
 public class OAuth2ActivityDTO {
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private Integer id;
+  private UUID id;
 
   /** A validator should be provided for this field later on */
   @NotNull(message = "The path field must be included")
@@ -22,7 +24,7 @@ public class OAuth2ActivityDTO {
   @NotNull(message = "The cumulativePath field must be included")
   private String cumulativePath;
 
-  @Nullable private Integer parentId;
+  @Nullable private UUID parentId;
 
   @NotNull(message = "The resourceServerClientId field must be included")
   private String resourceServerClientId;

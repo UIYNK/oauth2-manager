@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,7 +56,7 @@ public class OAuth2UserService {
                     HttpStatus.BAD_REQUEST));
   }
 
-  public OAuth2User loadUserByIdOrThrow(int id) {
+  public OAuth2User loadUserByIdOrThrow(UUID id) {
     return userRepository
         .findById(id)
         .orElseThrow(
@@ -66,7 +67,7 @@ public class OAuth2UserService {
                     HttpStatus.BAD_REQUEST));
   }
 
-  public OAuth2UserDTO getUserDTOById(int id) {
+  public OAuth2UserDTO getUserDTOById(UUID id) {
     return oAuth2EntityDTOMapper.mapToOAuth2UserDTO(loadUserByIdOrThrow(id));
   }
 
@@ -74,7 +75,7 @@ public class OAuth2UserService {
     return userRepository.existsByUsername(userName);
   }
 
-  public boolean userExists(int userId) {
+  public boolean userExists(UUID userId) {
     return userRepository.existsById(userId);
   }
 
@@ -87,7 +88,7 @@ public class OAuth2UserService {
           HttpStatus.CONFLICT);
     }
 
-    Set<Integer> groupsIdSet =
+    Set<UUID> groupsIdSet =
         null != userDTO.getGroupsIdSet() ? userDTO.getGroupsIdSet() : new HashSet<>();
     ServiceUtils.BatchLoadByIdSetResult<OAuth2Group> groupsBatchLoadResult =
         ServiceUtils.batchLoadByIdSet(groupsIdSet, groupRepository);
@@ -105,13 +106,12 @@ public class OAuth2UserService {
     }
 
     OAuth2User newUser =
-        OAuth2User.builder()
-            .username(userDTO.getUsername())
-            .password(passwordEncoder.encode(userDTO.getPassword()))
-            .firstName(userDTO.getFirstName())
-            .lastName(userDTO.getLastName())
-            .groups(groupsBatchLoadResult.getFoundEntities())
-            .build();
+        new OAuth2User(
+            userDTO.getUsername(),
+            passwordEncoder.encode(userDTO.getPassword()),
+            userDTO.getFirstName(),
+            userDTO.getLastName(),
+            groupsBatchLoadResult.getFoundEntities());
     newUser = saveUser(newUser);
     return oAuth2EntityDTOMapper.mapToOAuth2UserDTO(newUser);
   }
@@ -122,7 +122,7 @@ public class OAuth2UserService {
   }
 
   @Transactional
-  public void assignGroupToUser(int userId, int groupId) {
+  public void assignGroupToUser(UUID userId, UUID groupId) {
     OAuth2User user = loadUserByIdOrThrow(userId);
     OAuth2Group group = groupService.loadGroupByIdOrThrow(groupId);
     if (!user.assignGroupToUser(group)) {
@@ -134,7 +134,7 @@ public class OAuth2UserService {
     saveUser(user);
   }
 
-  public Set<OAuth2ActivityDTO> getUserActivities(int userId) {
+  public Set<OAuth2ActivityDTO> getUserActivities(UUID userId) {
     OAuth2User user = loadUserByIdOrThrow(userId);
     return user.getActivities().stream()
         .map(activity -> oAuth2EntityDTOMapper.mapToOAuth2ActivityDTO(activity))

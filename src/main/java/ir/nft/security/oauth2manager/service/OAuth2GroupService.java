@@ -29,11 +29,11 @@ public class OAuth2GroupService {
     this.oAuth2EntityDTOMapper = oAuth2EntityDTOMapper;
   }
 
-  public OAuth2Group loadGroupByIdOrNull(int id) {
+  public OAuth2Group loadGroupByIdOrNull(UUID id) {
     return groupRepository.findById(id).orElse(null);
   }
 
-  public OAuth2Group loadGroupByIdOrThrow(int id) {
+  public OAuth2Group loadGroupByIdOrThrow(UUID id) {
     return groupRepository
         .findById(id)
         .orElseThrow(
@@ -44,11 +44,11 @@ public class OAuth2GroupService {
                     HttpStatus.BAD_REQUEST));
   }
 
-  public OAuth2GroupDTO getGroupDTOById(int id) {
+  public OAuth2GroupDTO getGroupDTOById(UUID id) {
     return oAuth2EntityDTOMapper.mapToOAuth2GroupDTO(loadGroupByIdOrThrow(id));
   }
 
-  public boolean groupExists(int id) {
+  public boolean groupExists(UUID id) {
     return groupRepository.existsById(id);
   }
 
@@ -69,9 +69,9 @@ public class OAuth2GroupService {
           HttpStatus.CONFLICT);
     }
 
-    Set<Integer> subGroupsIdSet =
+    Set<UUID> subGroupsIdSet =
         null != groupDTO.getSubGroupsIdSet() ? groupDTO.getSubGroupsIdSet() : new HashSet<>();
-    Set<Integer> activitiesIdSet =
+    Set<UUID> activitiesIdSet =
         null != groupDTO.getActivitiesIdSet() ? groupDTO.getActivitiesIdSet() : new HashSet<>();
 
     ServiceUtils.BatchLoadByIdSetResult<OAuth2Group> subGroupsBatchLoadResult =
@@ -97,11 +97,10 @@ public class OAuth2GroupService {
     }
 
     OAuth2Group newGroup =
-        OAuth2Group.builder()
-            .title(groupDTO.getTitle())
-            .subGroups(subGroupsBatchLoadResult.getFoundEntities())
-            .activities(activitiesBatchLoadResult.getFoundEntities())
-            .build();
+        new OAuth2Group(
+            groupDTO.getTitle(),
+            subGroupsBatchLoadResult.getFoundEntities(),
+            activitiesBatchLoadResult.getFoundEntities());
     newGroup = saveGroup(newGroup);
     return oAuth2EntityDTOMapper.mapToOAuth2GroupDTO(newGroup);
   }

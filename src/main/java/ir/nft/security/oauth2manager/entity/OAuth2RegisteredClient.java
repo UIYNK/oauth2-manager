@@ -10,21 +10,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class OAuth2RegisteredClient implements OAuth2Entity {
-  @Id
-  @GeneratedValue(
-      strategy = GenerationType.SEQUENCE,
-      generator = "oauth2_registered_client_seq_gen")
-  @SequenceGenerator(
-      name = "oauth2_registered_client_seq_gen",
-      sequenceName = "oauth2_registered_client_seq",
-      allocationSize = 1)
-  @EqualsAndHashCode.Exclude
-  private Integer id;
-
+public abstract class OAuth2RegisteredClient extends OAuth2Entity {
   @NotNull
   @UserName
   @Column(nullable = false)
@@ -34,7 +23,8 @@ public abstract class OAuth2RegisteredClient implements OAuth2Entity {
   @Column(nullable = false)
   private String clientSecret;
 
-  public OAuth2RegisteredClient(String clientId, String clientSecret) {
+  protected OAuth2RegisteredClient(String clientId, String clientSecret) {
+    super();
     this.clientId = clientId;
     this.clientSecret = clientSecret;
   }

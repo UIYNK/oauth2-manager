@@ -7,6 +7,8 @@ import ir.nft.security.oauth2manager.validation.annotation.UserName;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.UUID;
+
 @Setter
 @Getter
 @Builder
@@ -14,7 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 public class OAuth2ResourceServerDTO {
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private Integer id;
+  private UUID id;
 
   @UserName(message = "Client IDs must follow this pattern: " + ValidationPolicy.USERNAME_REGEX)
   @NotNull(message = "The clientId field must be included")

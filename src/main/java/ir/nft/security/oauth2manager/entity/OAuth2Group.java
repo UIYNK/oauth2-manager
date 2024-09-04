@@ -13,26 +13,16 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "oauth2_group")
-public class OAuth2Group implements OAuth2Entity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "oauth2_group_seq_gen")
-  @SequenceGenerator(
-      name = "oauth2_group_seq_gen",
-      sequenceName = "oauth2_group_seq",
-      allocationSize = 1)
-  @EqualsAndHashCode.Exclude
-  private Integer id;
+public class OAuth2Group extends OAuth2Entity {
 
   @Column(unique = true, nullable = false)
   @GroupTitle
   @NotNull
   private String title;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany
   @JoinTable(
       name = "oauth2_group_group",
       joinColumns = @JoinColumn(name = "group_id"),
@@ -41,7 +31,7 @@ public class OAuth2Group implements OAuth2Entity {
   @EqualsAndHashCode.Exclude
   private Set<OAuth2Group> subGroups;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany
   @JoinTable(
       name = "oauth2_group_activity",
       joinColumns = @JoinColumn(name = "group_id"),
@@ -49,6 +39,16 @@ public class OAuth2Group implements OAuth2Entity {
   @Nullable
   @EqualsAndHashCode.Exclude
   private Set<OAuth2Activity> activities;
+
+  public OAuth2Group(
+      String title,
+      @Nullable Set<OAuth2Group> subGroups,
+      @Nullable Set<OAuth2Activity> activities) {
+    super();
+    this.title = title;
+    this.subGroups = subGroups;
+    this.activities = activities;
+  }
 
   public boolean addSubgroup(OAuth2Group subGroup) {
     if (null == this.subGroups) {

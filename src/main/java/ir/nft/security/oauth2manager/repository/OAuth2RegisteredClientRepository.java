@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @NoRepositoryBean
 public interface OAuth2RegisteredClientRepository<T extends OAuth2RegisteredClient>
-    extends JpaRepository<T, Integer> {
+    extends JpaRepository<T, UUID> {
   Optional<T> findByClientId(String clientId);
 
   boolean existsByClientId(String clientId);

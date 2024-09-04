@@ -9,16 +9,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public final class ServiceUtils {
   private ServiceUtils() {}
 
   public static <T extends OAuth2Entity> BatchLoadByIdSetResult<T> batchLoadByIdSet(
-      Set<Integer> ids, JpaRepository<T, Integer> repository) {
+      Set<UUID> ids, JpaRepository<T, UUID> repository) {
+
     List<T> entitiesFromDB = repository.findAllById(ids);
 
     Set<T> foundEntities = new HashSet<>();
-    Set<Integer> notFoundIds = new HashSet<>(ids);
+    Set<UUID> notFoundIds = new HashSet<>(ids);
     for (T entity : entitiesFromDB) {
       notFoundIds.remove(entity.getId());
       foundEntities.add(entity);
@@ -32,6 +34,11 @@ public final class ServiceUtils {
   @AllArgsConstructor
   public static class BatchLoadByIdSetResult<T extends OAuth2Entity> {
     private Set<T> foundEntities;
-    private Set<Integer> notFoundIds;
+    private Set<UUID> notFoundIds;
+
+    public BatchLoadByIdSetResult() {
+      this.foundEntities = new HashSet<>();
+      this.notFoundIds = new HashSet<>();
+    }
   }
 }
