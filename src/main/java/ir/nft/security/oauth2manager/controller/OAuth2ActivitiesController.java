@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("${app.base-api-url}" + "/activities")
+@RequestMapping(APISpecifications.BASE_API_V1_URL + "/activities")
 public class OAuth2ActivitiesController {
 
   private final OAuth2ActivityService activityService;
@@ -20,7 +20,7 @@ public class OAuth2ActivitiesController {
     this.activityService = activityService;
   }
 
-  @PostMapping("")
+  @PostMapping
   public ResponseEntity<OAuth2ActivityDTO> registerOAuth2Activity(
       @Valid @RequestBody OAuth2ActivityDTO activityDTO) {
     OAuth2ActivityDTO registeredActivities = activityService.createActivity(activityDTO);

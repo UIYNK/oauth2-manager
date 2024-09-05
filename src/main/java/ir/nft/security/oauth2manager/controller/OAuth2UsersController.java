@@ -2,6 +2,7 @@ package ir.nft.security.oauth2manager.controller;
 
 import ir.nft.security.oauth2manager.dto.domain.OAuth2ActivityDTO;
 import ir.nft.security.oauth2manager.dto.domain.OAuth2UserDTO;
+import ir.nft.security.oauth2manager.dto.idcombination.OAuth2UserIdDTO;
 import ir.nft.security.oauth2manager.service.OAuth2UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("${app.base-api-url}" + "/users")
+@RequestMapping(APISpecifications.BASE_API_V1_URL + "/users")
 public class OAuth2UsersController {
 
   private final OAuth2UserService userService;
@@ -40,9 +41,9 @@ public class OAuth2UsersController {
     return ResponseEntity.ok(userService.getUserDTOById(userId));
   }
 
-  @GetMapping("/{user-id}/activities")
+  @PostMapping(value = "/activities")
   public ResponseEntity<Set<OAuth2ActivityDTO>> getActivities(
-      @PathVariable(name = "user-id") UUID userId) {
-    return ResponseEntity.ok(userService.getUserActivities(userId));
+      @Valid @RequestBody OAuth2UserIdDTO userIdDTO) {
+    return ResponseEntity.ok(userService.getUserActivities(userIdDTO.getUserId()));
   }
 }

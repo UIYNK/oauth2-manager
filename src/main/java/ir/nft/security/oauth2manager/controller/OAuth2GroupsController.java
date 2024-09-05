@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("${app.base-api-url}" + "/groups")
+@RequestMapping(APISpecifications.BASE_API_V1_URL + "/groups")
 public class OAuth2GroupsController {
 
   private final OAuth2GroupService groupService;
@@ -19,7 +19,7 @@ public class OAuth2GroupsController {
     this.groupService = groupService;
   }
 
-  @PostMapping("")
+  @PostMapping
   public ResponseEntity<OAuth2GroupDTO> registerOAuth2Group(
       @Valid @RequestBody OAuth2GroupDTO groupDTO) {
     OAuth2GroupDTO registeredGroups = groupService.createGroup(groupDTO);
