@@ -2,6 +2,7 @@ package ir.nft.security.oauth2manager.controller;
 
 import ir.nft.security.oauth2manager.dto.domain.OAuth2ActivityDTO;
 import ir.nft.security.oauth2manager.dto.domain.OAuth2UserDTO;
+import ir.nft.security.oauth2manager.dto.idcombination.OAuth2UserGroupIdCombinationDTO;
 import ir.nft.security.oauth2manager.dto.idcombination.OAuth2UserIdDTO;
 import ir.nft.security.oauth2manager.service.OAuth2UserService;
 import jakarta.validation.Valid;
@@ -13,7 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(APISpecifications.BASE_API_V1_URL + "/users")
+@RequestMapping(APISpecifications.USERS_API_V1_URL)
 public class OAuth2UsersController {
 
   private final OAuth2UserService userService;
@@ -29,16 +30,16 @@ public class OAuth2UsersController {
     return ResponseEntity.status(HttpStatus.CREATED).body(registeredUsers);
   }
 
-  @PostMapping("/{user-id}/groups/{group-id}")
+  @PostMapping("/groups")
   public ResponseEntity<String> assignGroupToUser(
-      @PathVariable(name = "user-id") UUID userId, @PathVariable(name = "group-id") UUID groupId) {
-    userService.assignGroupToUser(userId, groupId);
+      @Valid @RequestBody OAuth2UserGroupIdCombinationDTO userGroupIdCombinationDTO) {
+    userService.assignGroupToUser(userGroupIdCombinationDTO);
     return ResponseEntity.ok("The group has been successfully added to the user.");
   }
 
-  @GetMapping("/{user-id}")
-  public ResponseEntity<OAuth2UserDTO> getUserById(@PathVariable(name = "user-id") UUID userId) {
-    return ResponseEntity.ok(userService.getUserDTOById(userId));
+  @PostMapping
+  public ResponseEntity<OAuth2UserDTO> getUserById(@Valid @RequestBody OAuth2UserIdDTO userIdDTO) {
+    return ResponseEntity.ok(userService.getUserDTOById(userIdDTO.getUserId()));
   }
 
   @PostMapping(value = "/activities")

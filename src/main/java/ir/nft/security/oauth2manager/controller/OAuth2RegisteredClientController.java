@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(APISpecifications.BASE_API_V1_URL + "/registered-clients")
+@RequestMapping(APISpecifications.REGISTERED_CLIENTS_API_V1_URL)
 public class OAuth2RegisteredClientController {
   private final OAuth2RegisteredClientService registeredClientService;
 
