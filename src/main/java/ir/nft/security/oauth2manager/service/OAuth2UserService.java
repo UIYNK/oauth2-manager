@@ -2,6 +2,7 @@ package ir.nft.security.oauth2manager.service;
 
 import ir.nft.security.oauth2manager.dto.domain.OAuth2ActivityDTO;
 import ir.nft.security.oauth2manager.dto.domain.OAuth2UserDTO;
+import ir.nft.security.oauth2manager.dto.idcombination.OAuth2UserGroupIdCombinationDTO;
 import ir.nft.security.oauth2manager.entity.OAuth2Group;
 import ir.nft.security.oauth2manager.entity.OAuth2User;
 import ir.nft.security.oauth2manager.exception.DomainException;
@@ -122,13 +123,13 @@ public class OAuth2UserService {
   }
 
   @Transactional
-  public void assignGroupToUser(UUID userId, UUID groupId) {
-    OAuth2User user = loadUserByIdOrThrow(userId);
-    OAuth2Group group = groupService.loadGroupByIdOrThrow(groupId);
+  public void assignGroupToUser(OAuth2UserGroupIdCombinationDTO ids) {
+    OAuth2User user = loadUserByIdOrThrow(ids.getUserId());
+    OAuth2Group group = groupService.loadGroupByIdOrThrow(ids.getGroupId());
     if (!user.assignGroupToUser(group)) {
       throw new DomainException(
           "Already a Member of This Group",
-          "This user already has the group with ID " + groupId + " in its groups list",
+          "This user already has the group with ID " + ids.getGroupId() + " in its groups list",
           HttpStatus.CONFLICT);
     }
     saveUser(user);
