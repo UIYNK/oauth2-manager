@@ -6,11 +6,11 @@ import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
 @Entity
+@DiscriminatorValue("CLIENT")
 @NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "oauth2_client")
 public class OAuth2Client extends OAuth2RegisteredClient {
 
   @NotNull

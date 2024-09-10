@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>ir.nft.security</groupId>
-            <artifactId>oauthboot</artifactId>
+            <artifactId>oauth-boot</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
