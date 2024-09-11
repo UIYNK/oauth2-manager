@@ -25,7 +25,7 @@ public class OAuth2Activity extends OAuth2Entity {
   private String cumulativePath;
 
   @Nullable
-  @OneToOne
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_id")
   private OAuth2Activity parent;
 

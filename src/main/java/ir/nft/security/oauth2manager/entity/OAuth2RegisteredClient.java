@@ -8,11 +8,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "oauth2_registered_client")
+@DiscriminatorColumn(name = "registered_client_type")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@MappedSuperclass
 public abstract class OAuth2RegisteredClient extends OAuth2Entity {
   @NotNull
   @UserName
